@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Твоє Перевтілення</title>
+  <style>
+    body {
+      background: url('dop.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #f5f5dc;
+      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+      text-align: center;
+      padding: 40px;
+      overflow-x: hidden;
+    }
+
+    .quiz-container {
+      background: rgba(20, 20, 20, 0.85);
+      padding: 40px;
+      border-radius: 25px;
+      max-width: 750px;
+      margin: auto;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+      border: 2px solid;
+      border-image: linear-gradient(45deg, #bfa, #4cf, #c6f) 1;
+      animation: fadeIn 2s ease;
+      display: none;
+    }
+
+    h1 {
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #000;
+    }
+
+    .question {
+      margin-bottom: 30px;
+      animation: slideUp 1s ease;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0;
+      cursor: pointer;
+      padding: 12px 20px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    label:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.03);
+    }
+
+    label.selected {
+      background: rgba(100, 255, 200, 0.2);
+      border-color: #6ef0d3;
+      box-shadow: 0 0 10px #6ef0d3;
+      transform: scale(1.03);
+    }
+
+    button {
+      background-color: #6a3e2a;
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      margin-top: 20px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    button:hover {
+      background-color: #84503b;
+      transform: scale(1.05);
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 1.6em;
+      animation: fadeIn 1s ease;
+    }
+
+    .start-button {
+      background-color: #6a3e2a;
+      color: white;
+      font-size: 1.6em;
+      padding: 15px 30px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 0 10px #000;
+    }
+
+    .start-button:hover {
+      background-color: #84503b;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    #race-image {
+      width: 200px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="start-button" id="startButton" onclick="startQuiz()">Почати перевтілення</div> 
+  
+  <div class="quiz-container" id="quizContainer">
+    <h1>🌌 Твоє Перевтілення</h1>
+    <div id="quiz"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "Що керує твоєю душею?",
+        options: [
+          "Мудрість", "Сила", "Хитрість", "Пристрасть", "Честь",
+          "Темрява", "Спокій", "Надія", "Лють", "Гармонія"
+        ]
+      },
+      {
+        text: "Обери свою сутність:",
+        options: ["Полум'я", "Вітер", "Тінь", "Світло", "Крига"]
+      },
+      {
+        text: "Який шлях ти обираєш?",
+        options: [
+          "Магічне мистецтво", "Меч і честь", "Підступність і стратегія",
+          "Природна гармонія", "Священна місія"
+        ]
+      },
+      {
+        text: "Який твій найсильніший бік?",
+        options: ["Інтелект", "Харизма", "Спритність", "Стійкість", "Мудрість"]
+      },
+      {
+        text: "Який ідеал тобі найближчий?",
+        options: ["Честь", "Свобода", "Таємниці", "Віра", "Співчуття"]
+      },
+      {
+        text: "Яке твоє улюблене місце?",
+        options: ["Темний ліс", "Старовинна бібліотека", "Гора драконів", "Таверна", "Храм"]
+      },
+      {
+        text: "Як ти вирішуєш конфлікти?",
+        options: ["Словом", "Силою", "Підкупом", "Закляттям", "Перемовинами"]
+      },
+      {
+        text: "Чого ти найбільше боїшся?",
+        options: ["Зради", "Смерті", "Власної сили", "Забуття", "Самотності"]
+      }
+    ];
+
+    const raceMap = {
+      "Мудрість": { race: "Ельф", img: "elf.png.jpg" },
+      "Сила": { race: "Тіфлінг", img: "tiefling.jpg" },
+      "Хитрість": { race: "Тіфлінг", img: "tiefling.jpg" },
+      "Пристрасть": { race: "Дроу", img: "drow.jpg" },
+      "Честь": { race: "Дворф", img: "dwarf.jpg" },
+      "Темрява": { race: "Орк", img: "orc.jpg" },
+      "Спокій": { race: "Драконороджений", img: "dragonborn.webp" },
+      "Надія": { race: "Асімар", img: "dragonborn.webp" },
+      "Лють": { race: "Барбар", img: "orc.jpg" },
+      "Гармонія": { race: "Гном", img: "gnome.jpg" }
+    };
+
+    const classMap = {
+      "Полум'я": "Чарівник",
+      "Вітер": "Паладин",
+      "Тінь": "Плут",
+      "Світло": "Клірик",
+      "Крига": "Друїд"
+    };
+
+    let currentQuestion = 0;
+    const userAnswers = [];
+
+    function renderQuestion() {
+      const quizDiv = document.getElementById("quiz");
+      quizDiv.innerHTML = "";
+
+      if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+        const div = document.createElement("div");
+        div.className = "question";
+
+        let html = `<p>${q.text}</p>`;
+        q.options.forEach(opt => {
+          html += ` 
+            <label onclick="selectOption(this)">
+              <input type="radio" name="answer" value="${opt}"> ${opt}
+            </label>`;
+        });
+        html += '<br><button onclick="nextQuestion()">Далі</button>';
+        div.innerHTML = html;
+        quizDiv.appendChild(div);
+      }
+    }
+
+    function selectOption(labelEl) {
+      const labels = document.querySelectorAll('label');
+      labels.forEach(l => l.classList.remove('selected'));
+      labelEl.classList.add('selected');
+      labelEl.querySelector('input[type="radio"]').checked = true;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector("input[name='answer']:checked");
+      if (!selected) {
+        alert("Будь ласка, обери відповідь!");
+        return;
+      }
+      userAnswers.push(selected.value);
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const race = raceMap[userAnswers[0]] || { race: "Людина", img: "elf.png.jpg" };
+      const charClass = classMap[userAnswers[1]] || "Авантюрист";
+
+      const resultDiv = document.getElementById("result");
+      const raceImage = race.img ? `<img id="race-image" src="${race.img}" alt="${race.race}">` : '';
+      
+      resultDiv.style.opacity = 0;
+      setTimeout(() => {
+        resultDiv.innerHTML =
+          `<h2>🧙 Ти перевтілився у ${race.race}а — ${charClass}а!</h2>
+          ${raceImage}
+          <p>Твій шлях: ${userAnswers[2]}</p>
+          <p>Найсильніший бік: ${userAnswers[3]}</p>
+          <p>Ідеал: ${userAnswers[4]}</p>
+          <p>Улюблене місце: ${userAnswers[5]}</p>
+          <p>Спосіб вирішення конфліктів: ${userAnswers[6]}</p>
+          <p>Страх: ${userAnswers[7]}</p>`;
+        resultDiv.style.opacity = 1;
+      }, 300);
+    }
+
+    function startQuiz() {
+      document.getElementById("quizContainer").style.display = "block";
+      document.getElementById("startButton").style.display = "none";
+      renderQuestion();
+    }
+  </script>
+</body>
+</html>
